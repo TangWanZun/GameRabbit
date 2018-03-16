@@ -85,6 +85,8 @@ function GRabbit(){
 	}
 	//精灵族
 	this.spititList = new List();
+	//仅渲染精灵族
+	this.onlySpititList = new List();
 	//单独的碰撞渲染
 	this.crashList = new List();
 	//手势开始点击
@@ -199,7 +201,6 @@ function GRabbit(){
 			//运行所有精灵族中的精灵行为
 			self.spititList.forEach(function(val){
 				val.action();
-				
 				//单独碰撞渲染
 				self.crashList.forEach(function(crash){
 					crash.action(val);
@@ -209,12 +210,20 @@ function GRabbit(){
 			self.crashList.forEach(function(val){
 				val.end();
 			});
+			//运行只渲染精灵族
+			self.onlySpititList.forEach(function(val){
+				val.action();
+			});
 			self.raf=window.requestAnimationFrame(draw);
 		}
 		//运行主时间轴
 		this.start = function(){
 			//初始化所有精灵族中的精灵
 			self.spititList.forEach(function(val){
+				val.init();
+			});
+			//初始化只渲染精灵族
+			self.onlySpititList.forEach(function(val){
 				val.init();
 			});
 			draw();	
