@@ -8,30 +8,30 @@ var config = {
 var stage = new GRbit.Stage({
 	width:config.canvasWidth,
 	height:config.canvasHeight,
-//			scaleX:document.body.offsetWidth/config.canvasWidth,
-//			scaleY:document.body.offsetHeight/config.canvasHeight,
+	scaleX:document.body.offsetWidth/config.canvasWidth,
+	scaleY:document.body.offsetHeight/config.canvasHeight,
 });
 //创建敌机
-var enemy = new Aircraft({
-	x:100,
-	y:100,
-	Z:0,
-	HP:10,
-	imgObj:coverageImage,
-	width:50,
-	height:50,
-	px:41,
-	py:64,
-	pwidth:60,
-	pheight:60,
-	onUpdata:function(){
-		//死亡
-		if(this.HP<0){
-			this.remove();
-			Explode(this.x,this.y);
-		}
-	}
-})
+//var enemy = new Aircraft({
+//	x:100,
+//	y:100,
+//	Z:0,
+//	HP:10,
+//	imgObj:coverageImage,
+//	width:50,
+//	height:50,
+//	px:41,
+//	py:64,
+//	pwidth:60,
+//	pheight:60,
+//	onUpdata:function(){
+//		//死亡
+//		if(this.HP<0){
+//			this.remove();
+//			Explode(this.x,this.y);
+//		}
+//	}
+//})
 //创建一个我方飞机
 var aircraft = new Aircraft({
 	x:stage.width/2,
@@ -81,12 +81,12 @@ GRbit.spititList.push(aircraft);
 //创建一个街机碰撞
 GRbit.ArcadeCrash.addCrash(aircraft,"zj");
 
-GRbit.spititList.push(enemy);
-GRbit.ArcadeCrash.addCrash(enemy,"zj3",{
-	"zj":function(){
-		return 1;
-	}
-});
+//GRbit.spititList.push(enemy);
+//GRbit.ArcadeCrash.addCrash(enemy,"zj3",{
+//	"zj":function(){
+//		return 1;
+//	}
+//});
 
 //启动碰撞映射
 //GRbit.ArcadeCrash.crachMapStart()

@@ -48,7 +48,7 @@ onDrag = function(spitit){
 		GRbit.ArcadeCrash.resetDraw(aircraft);
 	});
 }
-//主角飞机类
+//飞机类
 var Aircraft = function(Pro){
 	GRbit.ImgSpitit.call(this,Pro);
 	this.HP = Pro.HP;
@@ -56,6 +56,8 @@ var Aircraft = function(Pro){
 	this.Z = Pro.Z;
 	//子弹类型
 	this.shellType = 1;
+	//x轴方向的移动速度
+	this.vy = Pro.vy;
 }
 //通用子弹类
 var Shell = function(Pro){
@@ -120,8 +122,8 @@ var Flame = function(x,y){
 	Pro.height = 40;
 	//加载图片
 	Pro.imgObj = coverageImage;
-	Pro.px = 106;
-	Pro.py = 65;
+	Pro.px = 0;
+	Pro.py = 196;
 	Pro.pwidth = 64;
 	Pro.pheight = 64;
 	//当前存在的帧数
@@ -171,11 +173,11 @@ var Enemy = function(){
 		var enemy = new Aircraft({
 			x:i*70,
 			y:i*-50,
-			Z:0,
-			HP:3,
+			vy:3,
+			HP:1,
 			imgObj:coverageImage,
 			width:50,
-			height:50,
+			height:40,
 			px:41,
 			py:64,
 			pwidth:60,
@@ -186,11 +188,24 @@ var Enemy = function(){
 					this.remove();
 					Explode(this.x,this.y);
 				}
-				//移动出边界
-				if(this.x>stage.height+this.height){
+				//移动并回向移动
+				if(this.y>stage.height*3/5){
+					this.px = 101;
+					this.vy = -1;
+				}
+				if(this.vy == -1&&GRbit.$roll%15==0){
+					this.px = 161;
+					this.vy = -2;
+				}
+				if(this.vy == -2 &&GRbit.$roll%15==0){
+					this.px = 221;
+					this.vy = -3;
+				}
+				//走出页面销毁
+				if(this.x<0-this.height){
 					this.remove();
 				}
-				this.y+=3;
+				this.y += this.vy;
 			}
 		})
 		GRbit.spititList.push(enemy);
