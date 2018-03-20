@@ -171,6 +171,20 @@ function GRabbit(){
 		this.pwidth = Pro.pwidth || undefined;
 		this.pheight = Pro.pheight || undefined;
 		this.imgObj = Pro.imgObj||(function(){console.error("图片未加载完成")})();
+		this.defaultList = Pro.defaultList || undefined;
+		this.$defaultIndex = 0;
+		//当有默认行为序列的时候，将会添加行为
+		if(this.defaultList){
+			this.defaultList.push([function(){return false}]);
+			this.defaultAction = function(){
+				if(this.defaultList[this.$defaultIndex][0](this)){
+					this.defaultList[this.$defaultIndex][1](this);
+					this.$defaultIndex++;
+				}
+			}
+		}else{
+			this.defaultAction = function(){};
+		}
 		//绘制精灵
 		this.init = function(){
 			self.ctx.drawImage(this.imgObj,this.px,this.py,this.pwidth,this.pheight,this.x-this.width/2,this.y-this.height/2,this.width,this.height);
@@ -181,6 +195,8 @@ function GRabbit(){
 		//默认精灵活动
 		this.action = function(){
 			this.onUpdata();
+			//运行默认行为锚序列
+			this.defaultAction();
 			this.init();
 		}
 	}

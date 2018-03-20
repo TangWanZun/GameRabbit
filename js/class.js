@@ -169,11 +169,11 @@ var Explode = function(x,y){
 }
 //生成1号绿色敌机序列
 var Enemy = function(){
-	for(let i=1;i<4;i++){
+	for(let i=1;i<5;i++){
 		var enemy = new Aircraft({
-			x:i*70,
-			y:i*-50,
-			vy:3,
+			x:i*65,
+			y:i*-30,
+			vy:4,
 			HP:1,
 			imgObj:coverageImage,
 			width:50,
@@ -182,28 +182,59 @@ var Enemy = function(){
 			py:64,
 			pwidth:60,
 			pheight:60,
+			defaultList:[
+				//飞机回执
+				[function(thit){
+					if(thit.y>stage.height*4/5){
+						return true;
+					}
+				},
+				function(thit){
+					thit.px = 101;
+					thit.vy = -1;
+				}],
+				//飞机进行形变
+				[function(thit){
+					if(thit.vy == -1&&GRbit.$roll%15==0){
+						return true;
+					}
+				},
+				function(thit){
+					thit.px = 161;
+					thit.vy = -2;
+				}],
+				[function(thit){
+					if(thit.vy == -2 &&GRbit.$roll%15==0){
+						return true;
+					}
+				},
+				function(thit){
+					thit.px = 221;
+					thit.vy = -3;
+				}],
+				//走出页面销毁
+				[function(thit){
+					if(thit.y<0-thit.height){
+						return true;
+					}
+				},
+				function(thit){
+					thit.remove();
+				}],
+				
+			],
 			onUpdata:function(){
 				//死亡
-				if(this.HP<0){
+				if(this.HP<=0){
 					this.remove();
 					Explode(this.x,this.y);
 				}
-				//移动并回向移动
-				if(this.y>stage.height*3/5){
-					this.px = 101;
-					this.vy = -1;
-				}
-				if(this.vy == -1&&GRbit.$roll%15==0){
-					this.px = 161;
-					this.vy = -2;
-				}
-				if(this.vy == -2 &&GRbit.$roll%15==0){
-					this.px = 221;
-					this.vy = -3;
-				}
-				//走出页面销毁
-				if(this.x<0-this.height){
-					this.remove();
+				if(GRbit.$roll%5==0){
+					if(this.x-aircraft.x<0){
+						this.x++;
+					}else{
+						this.x--;
+					}
 				}
 				this.y += this.vy;
 			}
