@@ -170,6 +170,7 @@ function GRabbit(){
 		this.py = Pro.py || 0;
 		this.pwidth = Pro.pwidth || undefined;
 		this.pheight = Pro.pheight || undefined;
+		this.rotate = Pro.rotate || undefined;
 		this.imgObj = Pro.imgObj||(function(){console.error("图片未加载完成")})();
 		this.defaultList = Pro.defaultList || undefined;
 		this.$defaultIndex = 0;
@@ -187,7 +188,9 @@ function GRabbit(){
 		}
 		//绘制精灵
 		this.init = function(){
+			self.ctx.save();
 			self.ctx.drawImage(this.imgObj,this.px,this.py,this.pwidth,this.pheight,this.x-this.width/2,this.y-this.height/2,this.width,this.height);
+			self.ctx.restore();
 			//drawReck(this.x-this.width/2,this.y-this.height/2,this.width,this.height,"rgb(255,255,255)");
 		}
 		//每次动画重绘进行的方法
