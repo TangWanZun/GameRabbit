@@ -56,8 +56,12 @@ var Aircraft = function(Pro){
 	this.Z = Pro.Z;
 	//子弹类型
 	this.shellType = 1;
-	//x轴方向的移动速度
+	//y轴方向的移动速度
 	this.vy = Pro.vy;
+	//x轴方向的移动速度
+	this.vx = Pro.vx;
+	//旋转角度
+	this.rotate = Pro.rotate;
 }
 //通用子弹类
 var Shell = function(Pro){
@@ -168,13 +172,13 @@ var Explode = function(x,y){
 	GRbit.onlySpititList.push(new GRbit.ImgSpitit(Pro));
 }
 //生成1号绿色敌机序列
-var Enemy = function(){
+var Enemy_1 = function(){
 	for(let i=1;i<5;i++){
 		var enemy = new Aircraft({
 			x:i*65,
 			y:i*-30,
 			vy:4,
-			HP:1,
+			HP:2,
 			imgObj:coverageImage,
 			width:50,
 			height:40,
@@ -240,8 +244,82 @@ var Enemy = function(){
 			}
 		})
 		GRbit.spititList.push(enemy);
-			GRbit.ArcadeCrash.addCrash(enemy,"zj3",{
-			"zj":function(){
+			GRbit.ArcadeCrash.addCrash(enemy,"enemy",{
+			"aircraft":function(){
+				return 1;
+			}
+		});
+	}
+}
+//生成2号红色敌机序列
+var Enemy_2 = function(){
+	for(let i=1;i<5;i++){
+		var enemy = new Aircraft({
+			x:-(i*65),
+			y:80,
+			vy:0,
+			vx:3,
+			HP:1,
+			imgObj:coverageImage,
+			width:40,
+			height:30,
+			px:281,
+			py:64,
+			rotate:-90,
+			pwidth:60,
+			pheight:60,
+			defaultList:[
+				[function(thit){
+					return thit.x>stage.width*1/2;
+				},
+				function(thit){
+					thit.$rotate = -45;
+					thit.vy = 1;
+					thit.vx = 2;
+				}],
+				[function(thit){
+					return thit.y > 120;
+				},
+				function(thit){
+					thit.$rotate = 0;
+					thit.vx = 0;
+					thit.vy = 2;
+				}],
+				[function(thit){
+					return thit.y > 200;
+				},
+				function(thit){
+					thit.vy = 3;
+					if(thit.x-aircraft.x<0){
+						thit.vx++;
+					}else{
+						thit.vx--;
+					}
+				}],
+				//走出页面销毁
+				[function(thit){
+					if(thit.y<0-thit.height){
+						return true;
+					}
+				},
+				function(thit){
+					thit.remove();
+				}],
+				
+			],
+			onUpdata:function(){
+				//死亡
+				if(this.HP<=0){
+					this.remove();
+					Explode(this.x,this.y);
+				}
+				this.y += this.vy;
+				this.x += this.vx;
+			}
+		})
+		GRbit.spititList.push(enemy);
+			GRbit.ArcadeCrash.addCrash(enemy,"enemy",{
+			"aircraft":function(){
 				return 1;
 			}
 		});

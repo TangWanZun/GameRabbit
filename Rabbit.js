@@ -174,7 +174,23 @@ function GRabbit(){
 		this.imgObj = Pro.imgObj||(function(){console.error("图片未加载完成")})();
 		this.defaultList = Pro.defaultList || undefined;
 		this.$defaultIndex = 0;
-		//当有默认行为序列的时候，将会添加行为
+		//添加一个私有属性，变换矩阵
+		var transform = {};
+		this.$rotate = Pro.rotate || undefined;
+		//添加旋转
+		Object.defineProperty(this,'rotate',{
+			set:function(){
+				if(this.$rotate){
+					var thit = this;
+					transform.rotate = function(){
+						self.ctx.translate(thit.x,thit.y);
+						self.ctx.rotate(thit.$rotate*Math.PI/180);
+						self.ctx.translate(-thit.x,-thit.y);
+					}
+				}
+			}
+		});
+		//当有默认行为序列的时候，将会添加行为序列
 		if(this.defaultList){
 			this.defaultList.push([function(){return false}]);
 			this.defaultAction = function(){
@@ -189,9 +205,12 @@ function GRabbit(){
 		//绘制精灵
 		this.init = function(){
 			self.ctx.save();
+			for(let x in transform){
+				transform[x]();
+			}
 			self.ctx.drawImage(this.imgObj,this.px,this.py,this.pwidth,this.pheight,this.x-this.width/2,this.y-this.height/2,this.width,this.height);
 			self.ctx.restore();
-			//drawReck(this.x-this.width/2,this.y-this.height/2,this.width,this.height,"rgb(255,255,255)");
+//			drawReck(this.x-this.width/2,this.y-this.height/2,this.width,this.height,"rgb(255,255,255)");
 		}
 		//每次动画重绘进行的方法
 		this.onUpdata = Pro.onUpdata || function(){}

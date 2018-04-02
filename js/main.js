@@ -16,17 +16,17 @@ var stage = new GRbit.Stage({
 //	x:100,
 //	y:100,
 //	Z:0,
-//	HP:10,
+//	HP:1,
 //	imgObj:coverageImage,
-//	width:50,
-//	height:50,
-//	px:41,
+//	width:40,
+//	height:30,
+//	px:281,
 //	py:64,
 //	pwidth:60,
 //	pheight:60,
 //	onUpdata:function(){
 //		//死亡
-//		if(this.HP<0){
+//		if(this.HP<=0){
 //			this.remove();
 //			Explode(this.x,this.y);
 //		}
@@ -42,6 +42,7 @@ var aircraft = new Aircraft({
 	height:44,
 	px:0,
 	py:0,
+//	rotate:90,
 	pwidth:96,
 	pheight:64,
 	HP:100,
@@ -63,8 +64,8 @@ var aircraft = new Aircraft({
 		if(GRbit.$roll%5==0&&GRbit.$roll%20!=0){
 			let shell = Shell_1(this.x,this.y-this.height/2);
 			GRbit.spititList.push(shell);
-			GRbit.ArcadeCrash.addCrash(shell,"zd",{
-				"zj3":function(obj,obj2){
+			GRbit.ArcadeCrash.addCrash(shell,"aircraft",{
+				"enemy":function(obj,obj2){
 					if(!obj.isint){
 						Flame(obj.x,obj.y-obj.height/2);
 						obj2.HP--;
@@ -79,11 +80,11 @@ var aircraft = new Aircraft({
 onDrag(aircraft);
 GRbit.spititList.push(aircraft);
 //创建一个街机碰撞
-GRbit.ArcadeCrash.addCrash(aircraft,"zj");
-
+GRbit.ArcadeCrash.addCrash(aircraft,"aircraft");
+//
 //GRbit.spititList.push(enemy);
-//GRbit.ArcadeCrash.addCrash(enemy,"zj3",{
-//	"zj":function(){
+//GRbit.ArcadeCrash.addCrash(enemy,"enemy",{
+//	"aircraft":function(){
 //		return 1;
 //	}
 //});

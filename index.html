@@ -80,15 +80,16 @@
 			background-color: rgba(0,0,0,0.8);
 		}
 		button{
-			position: fixed;
-			z-index: 9999;
-			height: 5vh;
-			background: rgba(255,255,255,0.5);
+			height: 4vh;
+			background: rgba(255,255,255,0.3);
 		}
 	</style>
 	<body>
 		<img src="coverage.png" style="display: none" id="coverage"/>
-		<button style="top:0px;left: 0px;" onclick="Enemy()">生成1号敌机组</button>
+		<div style="top:0px;left: 0px;position: fixed;z-index: 9999;">
+			<button  onclick="Enemy_1()">生成1号敌机组</button>
+			<button  onclick="Enemy_2()">生成2号敌机组</button>
+		</div>
 	</body>
 	<script src="Rabbit.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="js/class.js" ></script>
